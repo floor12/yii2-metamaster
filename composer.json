@@ -1,0 +1,31 @@
+{
+  "name": "floor12/yii2-metamaster",
+  "description": "This Yii2 component helps to organize page title, meta tags and `og` and `twitter` open graph tags in with a fiew lines of code.",
+  "type": "yii2-component",
+  "minimum-stability": "stable",
+  "keywords": [
+    "floor12",
+    "yii2 component",
+    "opengraph",
+    "meta",
+    "seo",
+    "yii",
+    "yii2",
+    "yii 2"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "floor12",
+      "email": "primelifecoder@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "floor12\\metamaster\\": [
+        "src/"
+      ]
+    }
+  }
+}
