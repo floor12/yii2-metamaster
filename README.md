@@ -1,4 +1,10 @@
 # yii2-metamaster
+[![Build Status](https://travis-ci.org/floor12/yii2-metamaster.svg?branch=master)](https://travis-ci.org/floor12/yii2-metamaster)
+[![Latest Stable Version](https://poser.pugx.org/floor12/yii2-metamaster/v/stable)](https://packagist.org/packages/floor12/yii2-metamaster)
+[![Latest Unstable Version](https://poser.pugx.org/floor12/yii2-metamaster/v/unstable)](https://packagist.org/packages/floor12/yii2-metamaster)
+[![Total Downloads](https://poser.pugx.org/floor12/yii2-metamaster/downloads)](https://packagist.org/packages/floor12/yii2-metamaster)
+[![License](https://poser.pugx.org/floor12/yii2-metamaster/license)](https://packagist.org/packages/floor12/yii2-metamaster)
+
 Универсальный компонент организующий META и Open Graph теги в вашем приложении.
 
 Список поддерживаемых тегов:
