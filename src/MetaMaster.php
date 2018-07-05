@@ -39,8 +39,16 @@ class MetaMaster extends Component
     public $image;
     public $imagePath;
     public $web = "@app/web";
+    public $request;
 
     private $_view;
+
+    public function init()
+    {
+        if (!$this->request)
+            $this->request = Yii::$app->request;
+        parent::init();
+    }
 
     /** Page title setter
      * @param $title
@@ -104,9 +112,9 @@ class MetaMaster extends Component
     {
         $this->_view->registerMetaTag(['property' => 'og:site_name', 'content' => $this->siteName]);
         $this->_view->registerMetaTag(['property' => 'og:type', 'content' => $this->type]);
-        $this->_view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: Yii::$app->request->absoluteUrl]);
+        $this->_view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->request->absoluteUrl]);
         $this->_view->registerMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
-        $this->_view->registerMetaTag(['name' => 'twitter:domain', 'content' => Yii::$app->request->hostInfo]);
+        $this->_view->registerMetaTag(['name' => 'twitter:domain', 'content' => $this->request->hostInfo]);
         $this->_view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
     }
 
@@ -153,16 +161,19 @@ class MetaMaster extends Component
         $image = $this->image ?: $this->defaultImage;
         if ($image) {
 
-            $this->_view->registerMetaTag(['property' => 'og:image', 'content' => Yii::$app->request->hostInfo . $image]);
-            $this->_view->registerMetaTag(['property' => 'twitter:image:src', 'content' => Yii::$app->request->hostInfo . $image]);
-            $this->_view->registerMetaTag(['itemprop' => 'image', 'content' => Yii::$app->request->hostInfo . $image]);
+            $this->_view->registerMetaTag(['property' => 'og:image', 'content' => $this->request->hostInfo . $image]);
+            $this->_view->registerMetaTag(['property' => 'twitter:image:src', 'content' => $this->request->hostInfo . $image]);
+            $this->_view->registerMetaTag(['itemprop' => 'image', 'content' => $this->request->hostInfo . $image]);
 
         }
+
         $path = Yii::getAlias($this->imagePath ?: $this->web . $image);
+        if ($this->imagePath)
+            $path = $this->imagePath;
         if (file_exists($path)) {
             $imageSize = getimagesize($path);
-            $this->_view->registerMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]], 'og:image:width');
-            $this->_view->registerMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]], 'og:image:height');
+            $this->_view->registerMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
+            $this->_view->registerMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]]);
         }
     }
 }
