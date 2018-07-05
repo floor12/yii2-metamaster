@@ -42,31 +42,51 @@ class MetaMaster extends Component
 
     private $_view;
 
-    public function setTitle($title)
+    /** Page title setter
+     * @param $title
+     * @return $this
+     */
+    public function setTitle(string $title)
     {
         $this->title = $title;
         return $this;
     }
 
-    public function setDescription($description)
+    /** Meta description setter
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription(string $description)
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setKeywords($keywords)
+    /** Meta keyword setter
+     * @param string $keywords
+     * @return $this
+     */
+    public function setKeywords(string $keywords)
     {
         $this->keywords = $keywords;
         return $this;
     }
 
-    public function setImage($image, $imagePath = '')
+    /** Set Open Graph image tag
+     * @param string $image
+     * @param string|null $imagePath
+     * @return $this
+     */
+    public function setImage(string $image, string $imagePath = null)
     {
         $this->image = $image;
         $this->imagePath = $imagePath;
         return $this;
     }
 
+    /** Register meta tags in View
+     * @param View $view
+     */
     public function register(View $view)
     {
         $this->_view = $view;
@@ -77,6 +97,9 @@ class MetaMaster extends Component
         $this->registerImage();
     }
 
+    /**
+     * Register core meta and og tags
+     */
     private function registerCoreInfo()
     {
         $this->_view->registerMetaTag(['property' => 'og:site_name', 'content' => $this->siteName]);
@@ -87,6 +110,9 @@ class MetaMaster extends Component
         $this->_view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
     }
 
+    /**
+     * Register title
+     */
     private function registerTitle()
     {
         if ($this->title) {
@@ -96,6 +122,9 @@ class MetaMaster extends Component
         }
     }
 
+    /**
+     * Register keywords
+     */
     private function registerKeywords()
     {
         if ($this->keywords) {
@@ -103,6 +132,9 @@ class MetaMaster extends Component
         }
     }
 
+    /**
+     * Register description
+     */
     private function registerDescription()
     {
         if ($this->description) {
@@ -113,6 +145,9 @@ class MetaMaster extends Component
         }
     }
 
+    /**
+     * Register image
+     */
     private function registerImage()
     {
         $image = $this->image ?: $this->defaultImage;
