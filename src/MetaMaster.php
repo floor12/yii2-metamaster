@@ -14,7 +14,7 @@ use yii\web\View;
 
 /**
  * Class MetaMaster
- * @package app\components
+ * @package floor12\metamaster
  * @property string $siteName
  * @property string $type
  * @property string $title
