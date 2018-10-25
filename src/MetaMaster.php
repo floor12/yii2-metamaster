@@ -8,7 +8,7 @@
 
 namespace floor12\metamaster;
 
-use \Yii;
+use Yii;
 use yii\base\Component;
 use yii\web\View;
 
@@ -57,6 +57,16 @@ class MetaMaster extends Component
     public function setTitle(string $title)
     {
         $this->title = $title;
+        return $this;
+    }
+
+    /** OgType setter
+     * @param $type
+     * @return $this
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
         return $this;
     }
 
