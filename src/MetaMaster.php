@@ -50,6 +50,8 @@ class MetaMaster extends Component
         parent::init();
     }
 
+
+
     /** Page title setter
      * @param $title
      * @return $this
@@ -59,6 +61,17 @@ class MetaMaster extends Component
         $this->title = $title;
         return $this;
     }
+
+    /** OgType setter
+     * @param $type
+     * @return $this
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
 
     /** OgType setter
      * @param $type
