@@ -20,6 +20,7 @@ use yii\web\View;
  * @property string $title
  * @property string $keywords
  * @property string $description
+ * @property string $canonical
  * @property string $url
  * @property string $defaultImage
  * @property string $image
@@ -34,6 +35,7 @@ class MetaMaster extends Component
     public $title;
     public $keywords;
     public $description;
+    public $canonical;
     public $url;
     public $defaultImage;
     public $image;
@@ -43,11 +45,27 @@ class MetaMaster extends Component
 
     private $_view;
 
+    /**
+     * @inheritDoc
+     */
     public function init()
     {
         if (!$this->request)
             $this->request = Yii::$app->request;
+
+        $this->canonical = Yii::$app->urlManager->createAbsoluteUrl($this->request->url);
         parent::init();
+    }
+
+
+    /** Site name setter
+     * @param $siteName
+     * @return $this
+     */
+    public function setSiteName(string $siteName)
+    {
+        $this->siteName = $siteName;
+        return $this;
     }
 
     /** Page title setter
@@ -59,6 +77,7 @@ class MetaMaster extends Component
         $this->title = $title;
         return $this;
     }
+
 
     /** OgType setter
      * @param $type
@@ -77,6 +96,16 @@ class MetaMaster extends Component
     public function setDescription(string $description)
     {
         $this->description = $description;
+        return $this;
+    }
+
+    /** Canonical setter
+     * @param $canonical
+     * @return $this
+     */
+    public function setCanonical(string $canonical)
+    {
+        $this->canonical = $canonical;
         return $this;
     }
 
@@ -111,7 +140,7 @@ class MetaMaster extends Component
         $this->registerCoreInfo();
         $this->registerTitle();
         $this->registerDescription();
-        $this->registerKeywords();
+        // $this->registerKeywords(); - keyword meta attribute is depricated
         $this->registerImage();
     }
 
@@ -120,6 +149,7 @@ class MetaMaster extends Component
      */
     private function registerCoreInfo()
     {
+        $this->_view->registerLinkTag(['rel' => 'canonical', 'href' => $this->canonical]);
         $this->_view->registerMetaTag(['property' => 'og:site_name', 'content' => $this->siteName]);
         $this->_view->registerMetaTag(['property' => 'og:type', 'content' => $this->type]);
         $this->_view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->request->absoluteUrl]);
