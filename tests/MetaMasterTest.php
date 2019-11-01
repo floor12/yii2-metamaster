@@ -8,15 +8,26 @@
 
 namespace floor12\metamaster\tests;
 
-use \Yii;
+use Yii;
 
 class MetaMasterTest extends TestCase
 {
 
     /**
-     * Проверяем изображения
+     * Test custom image setting up.
      */
+    public function testDeafultImage()
+    {
+        Yii::$app->metamaster
+            ->register($this->view);
 
+        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . Yii::$app->metamaster->defaultImage . '">', 'metaTags', $this->view);
+        $this->assertAttributeContains('<meta property="og:image" content="' . Yii::$app->metamaster->defaultImage . '">', 'metaTags', $this->view);
+    }
+
+    /**
+     * Test custom image setting up.
+     */
     public function testImage()
     {
         $filename = '/testImage.png';
@@ -31,7 +42,7 @@ class MetaMasterTest extends TestCase
     }
 
     /**
-     * Проверяем простановку заголовка
+     * Page title testing
      */
     public function testTitle()
     {
@@ -43,7 +54,7 @@ class MetaMasterTest extends TestCase
     }
 
     /**
-     * Проверяем простановку описания
+     * Description testing
      */
     public function testNoDescription()
     {
@@ -51,7 +62,9 @@ class MetaMasterTest extends TestCase
         $this->assertAttributeNotContains('<meta name="description" content="">', 'metaTags', $this->view);
     }
 
-
+    /**
+     * Description testing
+     */
     public function testDescription()
     {
         $description = md5(rand(0, 99999));
@@ -61,25 +74,9 @@ class MetaMasterTest extends TestCase
         $this->assertAttributeContains('<meta name="twitter:description" content="' . $description . '">', 'metaTags', $this->view);
     }
 
-    /**
-     * Проверяем простановку ключевых слов
-     */
-    public function testNoKeywords()
-    {
-        Yii::$app->metamaster->register($this->view);
-        $this->assertAttributeNotContains('<meta name="keywords" content="">', 'metaTags', $this->view);
-    }
-
-
-    public function testKeywords()
-    {
-        $keywords = md5(rand(0, 99999));
-        Yii::$app->metamaster->setKeywords($keywords)->register($this->view);
-        $this->assertAttributeContains('<meta name="keywords" content="' . $keywords . '">', 'metaTags', $this->view);
-    }
 
     /**
-     * Проверяем базовые ткги
+     * Core tags testing
      */
 
     public function testCoreTags()
@@ -88,16 +85,17 @@ class MetaMasterTest extends TestCase
         $url = md5(rand(0, 99999));
         $type = "book";
 
-
-        Yii::$app->metamaster->siteName = $siteName;
-        Yii::$app->metamaster->url = $url;
-        Yii::$app->metamaster->type = $type;
-        Yii::$app->metamaster->register($this->view);
+        Yii::$app->metamaster
+            ->setSiteName($siteName)
+            ->setUrl($url)
+            ->setType($type)
+            ->register($this->view);
 
         $this->assertAttributeContains('<meta property="og:site_name" content="' . $siteName . '">', 'metaTags', $this->view);
         $this->assertAttributeContains('<meta name="twitter:site" content="' . $siteName . '">', 'metaTags', $this->view);
         $this->assertAttributeContains('<meta property="og:type" content="' . $type . '">', 'metaTags', $this->view);
         $this->assertAttributeContains('<meta property="og:url" content="' . $url . '">', 'metaTags', $this->view);
+        $this->assertAttributeContains('<link href="' . $url . '" rel="canonical">', 'linkTags', $this->view);
     }
 
 

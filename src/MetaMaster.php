@@ -10,6 +10,7 @@ namespace floor12\metamaster;
 
 use Yii;
 use yii\base\Component;
+use yii\web\Request;
 use yii\web\View;
 
 /**
@@ -20,30 +21,59 @@ use yii\web\View;
  * @property string $title
  * @property string $keywords
  * @property string $description
- * @property string $canonical
  * @property string $url
  * @property string $defaultImage
  * @property string $image
  * @property string $imagePath
  * @property string $web
- * @property View $_view
+ * @property View $view
  */
 class MetaMaster extends Component
 {
+    /**
+     * @var string
+     */
     public $siteName = 'My Test Application';
-    public $type = 'article';
-    public $title;
-    public $keywords;
-    public $description;
-    public $canonical;
-    public $url;
-    public $defaultImage;
-    public $image;
-    public $imagePath;
+    /**
+     * @var string
+     */
     public $web = "@app/web";
-    public $request;
-
-    private $_view;
+    /**
+     * @var string
+     */
+    public $type = 'article';
+    /**
+     * @var string
+     */
+    public $defaultImage;
+    /**
+     * @var Request
+     */
+    private $request;
+    /**
+     * @var string
+     */
+    private $title;
+    /**
+     * @var string
+     */
+    private $description;
+    /**
+     * @var string
+     */
+    private $url;
+    /**
+     * @var string
+     */
+    private $image;
+    /**
+     * @var string
+     */
+    private $imagePath;
+    /**
+     * @var string
+     */
+    private $view;
 
     /**
      * @inheritDoc
@@ -52,11 +82,8 @@ class MetaMaster extends Component
     {
         if (!$this->request)
             $this->request = Yii::$app->request;
-
-        $this->canonical = Yii::$app->urlManager->createAbsoluteUrl($this->request->url);
         parent::init();
     }
-
 
     /** Site name setter
      * @param $siteName
@@ -75,6 +102,26 @@ class MetaMaster extends Component
     public function setTitle(string $title)
     {
         $this->title = $title;
+        return $this;
+    }
+
+    /** Url setter
+     * @param $title
+     * @return $this
+     */
+    public function setUrl(string $url)
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    /** Set request object
+     * @param $title
+     * @return $this
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
         return $this;
     }
 
@@ -99,23 +146,13 @@ class MetaMaster extends Component
         return $this;
     }
 
-    /** Canonical setter
-     * @param $canonical
-     * @return $this
-     */
-    public function setCanonical(string $canonical)
-    {
-        $this->canonical = $canonical;
-        return $this;
-    }
-
-    /** Meta keyword setter
+    /** Meta keyword setter is deprecated from 1.1.0
      * @param string $keywords
      * @return $this
+     * @deprecated
      */
     public function setKeywords(string $keywords)
     {
-        $this->keywords = $keywords;
         return $this;
     }
 
@@ -136,11 +173,10 @@ class MetaMaster extends Component
      */
     public function register(View $view)
     {
-        $this->_view = $view;
+        $this->view = $view;
         $this->registerCoreInfo();
         $this->registerTitle();
         $this->registerDescription();
-        // $this->registerKeywords(); - keyword meta attribute is depricated
         $this->registerImage();
     }
 
@@ -149,13 +185,14 @@ class MetaMaster extends Component
      */
     private function registerCoreInfo()
     {
-        $this->_view->registerLinkTag(['rel' => 'canonical', 'href' => $this->canonical]);
-        $this->_view->registerMetaTag(['property' => 'og:site_name', 'content' => $this->siteName]);
-        $this->_view->registerMetaTag(['property' => 'og:type', 'content' => $this->type]);
-        $this->_view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->request->absoluteUrl]);
-        $this->_view->registerMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
-        $this->_view->registerMetaTag(['name' => 'twitter:domain', 'content' => $this->request->hostInfo]);
-        $this->_view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
+        $this->view->registerMetaTag(['property' => 'og:site_name', 'content' => $this->siteName]);
+        $this->view->registerMetaTag(['property' => 'og:type', 'content' => $this->type]);
+        $this->view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->request->absoluteUrl]);
+        $this->view->registerMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
+        $this->view->registerMetaTag(['name' => 'twitter:domain', 'content' => $this->request->hostInfo]);
+        $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
+        $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
+        $this->view->registerLinkTag(['rel' => 'canonical', 'href' => $this->url ?: $this->request->absoluteUrl]);
     }
 
     /**
@@ -164,19 +201,9 @@ class MetaMaster extends Component
     private function registerTitle()
     {
         if ($this->title) {
-            $this->_view->title = $this->title;
-            $this->_view->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
-            $this->_view->registerMetaTag(['itemprop' => 'name', 'content' => $this->title]);
-        }
-    }
-
-    /**
-     * Register keywords
-     */
-    private function registerKeywords()
-    {
-        if ($this->keywords) {
-            $this->_view->registerMetaTag(['name' => 'keywords', 'content' => $this->keywords]);
+            $this->view->title = $this->title;
+            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
+            $this->view->registerMetaTag(['itemprop' => 'name', 'content' => $this->title]);
         }
     }
 
@@ -186,9 +213,9 @@ class MetaMaster extends Component
     private function registerDescription()
     {
         if ($this->description) {
-            $this->_view->registerMetaTag(['name' => 'description', 'content' => $this->description]);
-            $this->_view->registerMetaTag(['property' => 'og:description', 'content' => $this->description]);
-            $this->_view->registerMetaTag(['name' => 'twitter:description', 'content' => $this->description]);
+            $this->view->registerMetaTag(['name' => 'description', 'content' => $this->description]);
+            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $this->description]);
+            $this->view->registerMetaTag(['name' => 'twitter:description', 'content' => $this->description]);
 
         }
     }
@@ -201,9 +228,9 @@ class MetaMaster extends Component
         $image = $this->image ?: $this->defaultImage;
         if ($image) {
 
-            $this->_view->registerMetaTag(['property' => 'og:image', 'content' => $this->request->hostInfo . $image]);
-            $this->_view->registerMetaTag(['property' => 'twitter:image:src', 'content' => $this->request->hostInfo . $image]);
-            $this->_view->registerMetaTag(['itemprop' => 'image', 'content' => $this->request->hostInfo . $image]);
+            $this->view->registerMetaTag(['property' => 'og:image', 'content' => $this->request->hostInfo . $image]);
+            $this->view->registerMetaTag(['property' => 'twitter:image:src', 'content' => $this->request->hostInfo . $image]);
+            $this->view->registerMetaTag(['itemprop' => 'image', 'content' => $this->request->hostInfo . $image]);
 
         }
 
@@ -212,8 +239,8 @@ class MetaMaster extends Component
             $path = $this->imagePath;
         if (file_exists($path)) {
             $imageSize = getimagesize($path);
-            $this->_view->registerMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
-            $this->_view->registerMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]]);
+            $this->view->registerMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
+            $this->view->registerMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]]);
         }
     }
 }

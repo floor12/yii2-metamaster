@@ -24,7 +24,7 @@
   "authors": [
     {
       "name": "floor12",
-      "email": "primelifecoder@gmail.com",
+      "email": "floor12@floor12.net",
       "role": "Developer"
     }
   ],
@@ -39,5 +39,11 @@
     "psr-4": {
       "floor12\\metamaster\\tests\\": "tests/"
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
 }

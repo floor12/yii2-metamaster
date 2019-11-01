@@ -8,13 +8,20 @@
 
 namespace floor12\metamaster\tests;
 
+use Yii;
 use yii\console\Application;
-use \Yii;
+use yii\web\Request;
+use yii\web\View;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @var Request
+     */
     protected $request;
+    /**
+     * @var View
+     */
     protected $view;
 
     /**
@@ -23,12 +30,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->request = $this->getMock('\yii\web\Request', []);
         $this->mockApplication();
-        Yii::$app->metamaster->request = $this->request;
         $this->view = Yii::$app->getView();
     }
-
 
     /**
      * @inheritdoc
@@ -52,9 +56,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             'components' => [
                 'metamaster' => [
                     'class' => 'floor12\metamaster\MetaMaster',
+                    'defaultImage' => 'default.jpg'
                 ],
             ]
         ]);
+        Yii::$app->metamaster->setRequest($this->getMock('\yii\web\Request', []));
     }
 
     /**
