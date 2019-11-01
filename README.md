@@ -66,12 +66,12 @@ Its possible to use in any place of your app. Just user setters and then call th
 
 Allowed setters:
 ```php
-Metamaster::setSiteName(string)
-Metamaster::setTitle(string)
-Metamaster::setUrl(string)
-Metamaster::setType(string)
-Metamaster::setDescription(string)
-Metamaster::setImage(string $)
+Metamaster::setSiteName(string $value)
+Metamaster::setTitle(string $value)
+Metamaster::setUrl(string $value)
+Metamaster::setType(string $value)
+Metamaster::setDescription(string $value)
+Metamaster::setImage(string $relativePath, string $absolutePath = null)
 ```
 
 For example, using in controller:
