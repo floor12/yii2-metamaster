@@ -41,11 +41,11 @@ class MetaMaster extends Component
     /**
      * @var string
      */
-    public $type = 'article';
+    public $defaultImage;
     /**
      * @var string
      */
-    public $defaultImage;
+    private $type = 'article';
     /**
      * @var Request
      */
