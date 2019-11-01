@@ -5,9 +5,12 @@
 [![Total Downloads](https://poser.pugx.org/floor12/yii2-metamaster/downloads)](https://packagist.org/packages/floor12/yii2-metamaster)
 [![License](https://poser.pugx.org/floor12/yii2-metamaster/license)](https://packagist.org/packages/floor12/yii2-metamaster)
 
-Универсальный компонент организующий META и Open Graph теги в вашем приложении.
+*Этот файл так же доступен на [русском языке](README_RUS.md).*
 
-Список поддерживаемых тегов:
+This is a component for generate some Meta, Open Graph and Twitter tags in a template header of Yii2 app.
+
+This is a list of supported tags:
+- canonical
 - head title
 - meta description
 - meta keywords
@@ -27,23 +30,19 @@
 - itemprop:name
 - itemprop:image
 
-Установка
+Instalation
 ------------
 
-#### Ставим компонент
-
-Выполняем команду
+Just run:
 ```bash
 $ composer require floor12/yii2-metamaster
 ```
-
-иди добавляем в секцию "requred" файла composer.json
+or add this to the require section of your composer.json.
 ```json
 "floor12/yii2-metamaster": "dev-master"
 ```
 
-
-###Добавляем компонент в конфиг приложения
+After that, include some basic metamaster data into `components` section of application config.
 ```php  
     'components' => [
         'metamaster' => [
@@ -54,38 +53,35 @@ $ composer require floor12/yii2-metamaster
     ...
 ```
 
-Параметры:
-
-1. `siteName` - название сайта для Open Graph тегов.
-2. `defaultImage` - Путь к дефолтной картинке для экспорта в соцсети через Open Graph
-
-Остальные атрибуты смотрите в исходном коде класса.
+Attributes:
+1. `siteName` - name of project to show in Open Graph tags;
+2. `defaultImage` - web relative path to default image for Open Graph tags;
+3. `web` - yii2 alias to web path to read image width and height for Open Graph tags (default is `@app/web`)
 
 
-Использование
+Usage
 ------------
-Использовать можно в любоме месте, вызывая метод `register`, передавая туда объект View. Например в контроллере:
+
+Its possible to use in any place of your app. Just user setters and then call the `register(View $view)` method with View object passed into it.
+
+Allowed setters:
 ```php
-
-public function actionIndex()
-   {
-        Yii::$app->metamaster->title = "Тестовая страница";
-        Yii::$app->metamaster->description = "Это тестовое описание страницы";
-        Yii::$app->metamaster->kewords = "ключевые слова";
-        Yii::$app->metamaster->image = "/test/image.png";
-        Yii::$app->metamaster->register(Yii::$app->getView());
-        return $this->render('index');
-    }
+Metamaster::setSiteName(string)
+Metamaster::setTitle(string)
+Metamaster::setUrl(string)
+Metamaster::setType(string)
+Metamaster::setDescription(string)
+Metamaster::setImage(string $)
 ```
-При этом будут сформированы и зарегистрированы все теги, указанные в начале этого файла.
 
-Существует более простой вызов с использованием стрелочных функции:
+For example, using in controller:
+
 ```php
 public function actionIndex()
    {
         Yii::$app->metamaster
-                   ->setTitle("Тестовая страница")
-                   ->setDescription("Это тестовое описание страницы")
+                   ->setTitle("This is test page")
+                   ->setDescription("This is page description")
                    ->setImage('/images/article/image.png')
                    ->register(Yii::$app->getView());
                    
@@ -94,4 +90,23 @@ public function actionIndex()
       
 ```
 
-При использовании изображений, их фактический размер определяется автоматически и прописывается в соответствующие og-теги.
+It will generate all you need in template:
+```html
+<title>This is test page</title>
+<link href="https://your-domain.com/site/index" rel="canonical">
+<meta name="description" content="This is page description">
+<meta property="og:site_name" content="My cool new Web Site">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://your-domain.com/site/index">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:domain" content="https://your-domain.com">
+<meta name="twitter:site" content="My cool new Web Site">
+<meta property="og:title" content="This is test page">
+<meta itemprop="name" content="This is test page">
+<meta property="og:description" content="This is page description">
+<meta name="twitter:description" content="This is page description">
+<meta property="og:image" content="https://your-domain.com/images/article/image.png">
+<meta property="twitter:image:src" content="https://your-domain.com/images/article/image.png">
+<meta itemprop="image" content="https://your-domain.com/images/article/image.png">
+```
+
