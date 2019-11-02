@@ -62,7 +62,7 @@ Attributes:
 Usage
 ------------
 
-Its possible to use in any place of your app. Just user setters and then call the `register(View $view)` method with View object passed into it.
+Its possible to use in any place of your app. Just use setters and then call the `register(View $view)` method with View object passed into it.
 
 Allowed setters:
 ```php
