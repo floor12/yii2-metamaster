@@ -30,7 +30,7 @@ This is a list of supported tags:
 - itemprop:name
 - itemprop:image
 
-Instalation
+Installation
 ------------
 
 Just run:
