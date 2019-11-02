@@ -5,11 +5,9 @@
 [![Total Downloads](https://poser.pugx.org/floor12/yii2-metamaster/downloads)](https://packagist.org/packages/floor12/yii2-metamaster)
 [![License](https://poser.pugx.org/floor12/yii2-metamaster/license)](https://packagist.org/packages/floor12/yii2-metamaster)
 
-*Этот файл так же доступен на [русском языке](README_RUS.md).*
+Этот компонент генерирует мета-теги, Open Graph и Twitter-card теги в темплейте вашего Yii2 приложения.
 
-This is a component for generate some Meta, Open Graph and Twitter-card tags in a template header of Yii2 app.
-
-This is a list of supported tags:
+Список генерируемых тегов:
 - canonical
 - head title
 - meta description
@@ -30,19 +28,18 @@ This is a list of supported tags:
 - itemprop:name
 - itemprop:image
 
-Instalation
+Устанвка
 ------------
 
-Just run:
+Просто выполните команду:
 ```bash
 $ composer require floor12/yii2-metamaster
 ```
-or add this to the require section of your composer.json.
+или допишите руками в секцию require вашего composer.json.
 ```json
 "floor12/yii2-metamaster": "dev-master"
 ```
-
-After that, include some basic metamaster data into `components` section of application config.
+После этого, необходимо подключить и сконфигурировать компонент в соответствующую секцию конфига приложения:
 ```php  
     'components' => [
         'metamaster' => [
@@ -53,18 +50,19 @@ After that, include some basic metamaster data into `components` section of appl
     ...
 ```
 
-Attributes:
-1. `siteName` - name of project to show in Open Graph tags;
-2. `defaultImage` - web relative path to default image for Open Graph tags;
-3. `web` - yii2 alias to web path to read image width and height for Open Graph tags (default is `@app/web`)
+Аттрибуты:
+1. `siteName` - название проекта для Open Graph тегов;
+2. `defaultImage` - относительный путь к дефолтной картинки для  Open Graph тегов;
+3. `web` - yii2 алиас к веб-директории приложения (по-умолчанию `@app/web`)
 
 
-Usage
+Использование
 ------------
 
-Its possible to use in any place of your app. Just user setters and then call the `register(View $view)` method with View object passed into it.
+Компонент можно вызвать в любом месте приложения через сервис-локатор Yii2, с помощью сеттеров установить необходимые данные и зарегистрировать методом
+ `register(View $view)`, передав туда объект View.
 
-Allowed setters:
+Доступные сеттеры:
 ```php
 Metamaster::setSiteName(string $value)
 Metamaster::setTitle(string $value)
@@ -74,7 +72,7 @@ Metamaster::setDescription(string $value)
 Metamaster::setImage(string $relativePath, string $absolutePath = null)
 ```
 
-For example, using in controller:
+Пример использования в контроллере:
 
 ```php
 public function actionIndex()
@@ -90,7 +88,7 @@ public function actionIndex()
       
 ```
 
-It will generate all you need in template:
+Вышеуказанные код сгенерируеют следующий код в темплейте:
 ```html
 <title>This is test page</title>
 <link href="https://your-domain.com/site/index" rel="canonical">
