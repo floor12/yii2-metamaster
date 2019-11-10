@@ -57,6 +57,7 @@ Attributes:
 1. `siteName` - name of project to show in Open Graph tags;
 2. `defaultImage` - web relative path to default image for Open Graph tags;
 3. `web` - yii2 alias to web path to read image width and height for Open Graph tags (default is `@app/web`)
+4. `protocol` - default protocol to generate links (default is `https`)
 
 
 Usage
