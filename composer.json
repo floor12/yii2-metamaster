@@ -30,14 +30,12 @@
   ],
   "autoload": {
     "psr-4": {
-      "floor12\\metamaster\\": [
-        "src/"
-      ]
+      "floor12\\metamaster\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "floor12\\metamaster\\tests\\": "tests/"
+      "floor12\\metamaster\\tests\\": "tests"
     }
   },
   "repositories": [
