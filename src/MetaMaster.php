@@ -185,26 +185,29 @@ class MetaMaster extends Component
     }
 
     /**
-     * @return mixed
-     */
-    protected function getAbsuluteUrl()
-    {
-        return str_replace(['http', 'https'], $this->protocol, $this->request->absoluteUrl);
-    }
-
-    /**
      * Register core meta and og tags
      */
     private function registerCoreInfo()
     {
         $this->view->registerMetaTag(['property' => 'og:site_name', 'content' => $this->siteName]);
         $this->view->registerMetaTag(['property' => 'og:type', 'content' => $this->type]);
-        $this->view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->getAbsuluteUrl()]);
+        $this->view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->getAbsoluteUrl()]);
         $this->view->registerMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
         $this->view->registerMetaTag(['name' => 'twitter:domain', 'content' => str_replace(['http', 'https'], $this->protocol, $this->request->hostInfo)]);
         $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
         $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
-        $this->view->registerLinkTag(['rel' => 'canonical', 'href' => $this->url ?: $this->getAbsuluteUrl()]);
+        $this->view->registerLinkTag(['rel' => 'canonical', 'href' => $this->url ?: $this->getAbsoluteUrl()]);
+    }
+
+    /**
+     * @param null $absoluteUrl
+     * @return mixed
+     */
+    public function getAbsoluteUrl($absoluteUrl = null)
+    {
+        if (empty($absoluteUrl))
+            $absoluteUrl = $this->request->absoluteUrl;
+        return preg_replace('/https|http/', $this->protocol, $absoluteUrl, -1, $count);
     }
 
     /**

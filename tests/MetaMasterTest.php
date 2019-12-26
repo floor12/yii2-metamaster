@@ -8,6 +8,7 @@
 
 namespace floor12\metamaster\tests;
 
+use floor12\metamaster\MetaMaster;
 use Yii;
 
 class MetaMasterTest extends TestCase
@@ -79,24 +80,36 @@ class MetaMasterTest extends TestCase
      * Core tags testing
      */
 
-    public function testCoreTags()
+    public function testGetAbsoluteUrlHttpsToHttps()
     {
-        $siteName = md5(rand(0, 99999));
-        $url = md5(rand(0, 99999));
-        $type = "book";
-
-        Yii::$app->metamaster
-            ->setSiteName($siteName)
-            ->setUrl($url)
-            ->setType($type)
-            ->register($this->view);
-
-        $this->assertAttributeContains('<meta property="og:site_name" content="' . $siteName . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta name="twitter:site" content="' . $siteName . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:type" content="' . $type . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:url" content="' . $url . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<link href="' . $url . '" rel="canonical">', 'linkTags', $this->view);
+        $metamaster = new MetaMaster();
+        $metamaster->protocol = 'https';
+        $url = 'https://test.ru';
+        $this->assertEquals('https://test.ru', $metamaster->getAbsoluteUrl($url));
     }
 
+    public function testGetAbsoluteUrlHttpToHttps()
+    {
+        $metamaster = new MetaMaster();
+        $metamaster->protocol = 'https';
+        $url = 'http://test.ru';
+        $this->assertEquals('https://test.ru', $metamaster->getAbsoluteUrl($url));
+    }
+
+    public function testGetAbsoluteUrlHttpsToHttp()
+    {
+        $metamaster = new MetaMaster();
+        $metamaster->protocol = 'http';
+        $url = 'https://test.ru';
+        $this->assertEquals('http://test.ru', $metamaster->getAbsoluteUrl($url));
+    }
+
+    public function testGetAbsoluteUrlHttpToHttp()
+    {
+        $metamaster = new MetaMaster();
+        $metamaster->protocol = 'http';
+        $url = 'http://test.ru';
+        $this->assertEquals('http://test.ru', $metamaster->getAbsoluteUrl($url));
+    }
 
 }
