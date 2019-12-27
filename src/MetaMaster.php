@@ -193,7 +193,7 @@ class MetaMaster extends Component
         $this->view->registerMetaTag(['property' => 'og:type', 'content' => $this->type]);
         $this->view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->getAbsoluteUrl()]);
         $this->view->registerMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
-        $this->view->registerMetaTag(['name' => 'twitter:domain', 'content' => str_replace(['http', 'https'], $this->protocol, $this->request->hostInfo)]);
+        $this->view->registerMetaTag(['name' => 'twitter:domain', 'content' => $this->getAbsoluteUrl($this->request->hostInfo)]);
         $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
         $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
         $this->view->registerLinkTag(['rel' => 'canonical', 'href' => $this->url ?: $this->getAbsoluteUrl()]);
@@ -242,7 +242,7 @@ class MetaMaster extends Component
     {
         $image = $this->image ?: $this->defaultImage;
         if ($image) {
-            $imageUrl = str_replace(['http', 'https'], $this->protocol, $this->request->hostInfo . $image);
+            $imageUrl = $this->getAbsoluteUrl($this->request->hostInfo . $image);
             $this->view->registerMetaTag(['property' => 'og:image', 'content' => $imageUrl]);
             $this->view->registerMetaTag(['property' => 'twitter:image:src', 'content' => $imageUrl]);
             $this->view->registerMetaTag(['itemprop' => 'image', 'content' => $imageUrl]);
