@@ -252,7 +252,7 @@ class MetaMaster extends Component
         $path = Yii::getAlias($this->imagePath ?: $this->web . $image);
         if ($this->imagePath)
             $path = $this->imagePath;
-        if (file_exists($path)) {
+        if (@file_exists($path)) {
             $imageSize = getimagesize($path);
             $this->view->registerMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
             $this->view->registerMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]]);
