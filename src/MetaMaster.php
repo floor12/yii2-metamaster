@@ -242,7 +242,7 @@ class MetaMaster extends Component
     {
         $image = $this->image ?: $this->defaultImage;
         if ($image) {
-            $imageUrl = $this->getAbsoluteUrl($this->request->hostInfo . $image);
+            $imageUrl = $this->getAbsoluteUrl($image);
             $this->view->registerMetaTag(['property' => 'og:image', 'content' => $imageUrl]);
             $this->view->registerMetaTag(['property' => 'twitter:image:src', 'content' => $imageUrl]);
             $this->view->registerMetaTag(['itemprop' => 'image', 'content' => $imageUrl]);
