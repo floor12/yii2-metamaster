@@ -1,15 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: floor12
- * Date: 05.07.2018
- * Time: 17:45
- */
 
 namespace floor12\metamaster\tests;
-
-use floor12\metamaster\MetaMaster;
-use Yii;
 
 class MetaMasterTest extends TestCase
 {
@@ -19,11 +10,15 @@ class MetaMasterTest extends TestCase
      */
     public function testDeafultImage()
     {
+        $this->metamaster->getRequest()->method('getHostInfo')->willReturn('https://test.url');
+
         $this->metamaster
             ->register($this->view);
 
-        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . $this->metamaster->defaultImage . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:image" content="' . $this->metamaster->defaultImage . '">', 'metaTags', $this->view);
+        $fullImagePath = 'https://test.url' . $this->metamaster->defaultImage;
+
+        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . $fullImagePath . '">', 'metaTags', $this->view);
+        $this->assertAttributeContains('<meta property="og:image" content="' . $fullImagePath . '">', 'metaTags', $this->view);
     }
 
     /**
@@ -32,12 +27,17 @@ class MetaMasterTest extends TestCase
     public function testImage()
     {
         $filename = '/testImage.png';
+        $this->metamaster->getRequest()->method('getHostInfo')->willReturn('https://test.url');
+
+
         $this->metamaster
             ->setImage($filename, __DIR__ . $filename)
             ->register($this->view);
 
-        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . $filename . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:image" content="' . $filename . '">', 'metaTags', $this->view);
+        $fullImagePath = 'https://test.url' . $filename;
+
+        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . $fullImagePath . '">', 'metaTags', $this->view);
+        $this->assertAttributeContains('<meta property="og:image" content="' . $fullImagePath . '">', 'metaTags', $this->view);
         $this->assertAttributeContains('<meta property="og:image:width" content="300">', 'metaTags', $this->view);
         $this->assertAttributeContains('<meta property="og:image:height" content="300">', 'metaTags', $this->view);
     }
@@ -90,6 +90,7 @@ class MetaMasterTest extends TestCase
 
     public function testGetAbsoluteUrlHttpToHttps()
     {
+        $this->metamaster->protocol = 'https';
         $this->metamaster->getRequest()->method('getHostInfo')->willReturn('http://test.url');
         $url = '/test';
         $this->assertEquals('https://test.url/test', $this->metamaster->getAbsoluteUrl($url));
@@ -98,15 +99,17 @@ class MetaMasterTest extends TestCase
     public function testGetAbsoluteUrlHttpsToHttp()
     {
         $this->metamaster->protocol = 'http';
-        $url = 'https://test.ru';
-        $this->assertEquals('http://test.ru', $this->metamaster->getAbsoluteUrl($url));
+        $this->metamaster->getRequest()->method('getHostInfo')->willReturn('https://test.url');
+        $url = '/test';
+        $this->assertEquals('http://test.url/test', $this->metamaster->getAbsoluteUrl($url));
     }
 
     public function testGetAbsoluteUrlHttpToHttp()
     {
         $this->metamaster->protocol = 'http';
-        $url = 'http://test.ru';
-        $this->assertEquals('http://test.ru', $this->metamaster->getAbsoluteUrl($url));
+        $this->metamaster->getRequest()->method('getHostInfo')->willReturn('https://test.url');
+        $url = '/test';
+        $this->assertEquals('http://test.url/test', $this->metamaster->getAbsoluteUrl($url));
     }
 
 }
