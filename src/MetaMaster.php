@@ -198,10 +198,11 @@ class MetaMaster extends Component
      */
     public function getAbsoluteUrl($absoluteUrl = null)
     {
-        if ($absoluteUrl !== null)
+        if ($absoluteUrl !== null && substr($absoluteUrl, 0, 4) !== 'http') {
             $absoluteUrl = $this->request->getHostInfo() . $absoluteUrl;
-        else
+        } else {
             $absoluteUrl = $this->request->absoluteUrl;
+        }
         return preg_replace('/https|http/', $this->protocol, $absoluteUrl, -1, $count);
     }
 
@@ -245,8 +246,9 @@ class MetaMaster extends Component
         }
 
         $path = Yii::getAlias($this->imagePath ?: $this->web . $image);
-        if ($this->imagePath)
+        if ($this->imagePath) {
             $path = $this->imagePath;
+        }
         if (file_exists($path)) {
             $imageSize = getimagesize($path);
             $this->view->registerMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
