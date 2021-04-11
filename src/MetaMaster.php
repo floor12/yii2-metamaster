@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: floor12
- * Date: 05.07.2018
- * Time: 11:11
- */
 
 namespace floor12\metamaster;
 
@@ -14,7 +8,6 @@ use yii\web\Request;
 use yii\web\View;
 
 /**
- * Class MetaMaster
  * @package floor12\metamaster
  * @property string $siteName
  * @property string $type
@@ -193,7 +186,7 @@ class MetaMaster extends Component
         $this->view->registerMetaTag(['property' => 'og:type', 'content' => $this->type]);
         $this->view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->getAbsoluteUrl()]);
         $this->view->registerMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
-        $this->view->registerMetaTag(['name' => 'twitter:domain', 'content' => $this->getAbsoluteUrl($this->request->hostInfo)]);
+        $this->view->registerMetaTag(['name' => 'twitter:domain', 'content' => $this->getAbsoluteUrl('')]);
         $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
         $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
         $this->view->registerLinkTag(['rel' => 'canonical', 'href' => $this->url ?: $this->getAbsoluteUrl()]);
@@ -205,7 +198,10 @@ class MetaMaster extends Component
      */
     public function getAbsoluteUrl($absoluteUrl = null)
     {
-        if (empty($absoluteUrl))
+
+        if ($absoluteUrl !== null)
+            $absoluteUrl = $this->request->hostInfo . $absoluteUrl;
+        else
             $absoluteUrl = $this->request->absoluteUrl;
         return preg_replace('/https|http/', $this->protocol, $absoluteUrl, -1, $count);
     }
