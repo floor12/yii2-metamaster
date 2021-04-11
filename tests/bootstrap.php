@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: floor12
- * Date: 07.01.2018
- * Time: 12:25
- */
+
+error_reporting(E_ALL ^ E_DEPRECATED);
 
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'test');
