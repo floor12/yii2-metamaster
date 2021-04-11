@@ -19,11 +19,11 @@ class MetaMasterTest extends TestCase
      */
     public function testDeafultImage()
     {
-        Yii::$app->metamaster
+        $this->metamaster
             ->register($this->view);
 
-        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . Yii::$app->metamaster->defaultImage . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:image" content="' . Yii::$app->metamaster->defaultImage . '">', 'metaTags', $this->view);
+        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . $this->metamaster->defaultImage . '">', 'metaTags', $this->view);
+        $this->assertAttributeContains('<meta property="og:image" content="' . $this->metamaster->defaultImage . '">', 'metaTags', $this->view);
     }
 
     /**
@@ -32,7 +32,7 @@ class MetaMasterTest extends TestCase
     public function testImage()
     {
         $filename = '/testImage.png';
-        Yii::$app->metamaster
+        $this->metamaster
             ->setImage($filename, __DIR__ . $filename)
             ->register($this->view);
 
@@ -48,7 +48,7 @@ class MetaMasterTest extends TestCase
     public function testTitle()
     {
         $title = md5(rand(0, 99999));
-        Yii::$app->metamaster->setTitle($title)->register($this->view);
+        $this->metamaster->setTitle($title)->register($this->view);
         $this->assertEquals($this->view->title, $title);
         $this->assertAttributeContains('<meta property="og:title" content="' . $title . '">', 'metaTags', $this->view);
         $this->assertAttributeContains('<meta itemprop="name" content="' . $title . '">', 'metaTags', $this->view);
@@ -59,7 +59,7 @@ class MetaMasterTest extends TestCase
      */
     public function testNoDescription()
     {
-        Yii::$app->metamaster->register($this->view);
+        $this->metamaster->register($this->view);
         $this->assertAttributeNotContains('<meta name="description" content="">', 'metaTags', $this->view);
     }
 
@@ -69,7 +69,7 @@ class MetaMasterTest extends TestCase
     public function testDescription()
     {
         $description = md5(rand(0, 99999));
-        Yii::$app->metamaster->setDescription($description)->register($this->view);
+        $this->metamaster->setDescription($description)->register($this->view);
         $this->assertAttributeContains('<meta name="description" content="' . $description . '">', 'metaTags', $this->view);
         $this->assertAttributeContains('<meta property="og:description" content="' . $description . '">', 'metaTags', $this->view);
         $this->assertAttributeContains('<meta name="twitter:description" content="' . $description . '">', 'metaTags', $this->view);
@@ -82,34 +82,31 @@ class MetaMasterTest extends TestCase
 
     public function testGetAbsoluteUrlHttpsToHttps()
     {
-        $metamaster = new MetaMaster();
-        $metamaster->protocol = 'https';
-        $url = 'https://test.ru';
-        $this->assertEquals('https://test.ru', $metamaster->getAbsoluteUrl($url));
+        $this->metamaster->protocol = 'https';
+        $this->metamaster->getRequest()->method('getHostInfo')->willReturn('http://test.url');
+        $url = '/test';
+        $this->assertEquals('https://test.url/test', $this->metamaster->getAbsoluteUrl($url));
     }
 
     public function testGetAbsoluteUrlHttpToHttps()
     {
-        $metamaster = new MetaMaster();
-        $metamaster->protocol = 'https';
-        $url = 'http://test.ru';
-        $this->assertEquals('https://test.ru', $metamaster->getAbsoluteUrl($url));
+        $this->metamaster->getRequest()->method('getHostInfo')->willReturn('http://test.url');
+        $url = '/test';
+        $this->assertEquals('https://test.url/test', $this->metamaster->getAbsoluteUrl($url));
     }
 
     public function testGetAbsoluteUrlHttpsToHttp()
     {
-        $metamaster = new MetaMaster();
-        $metamaster->protocol = 'http';
+        $this->metamaster->protocol = 'http';
         $url = 'https://test.ru';
-        $this->assertEquals('http://test.ru', $metamaster->getAbsoluteUrl($url));
+        $this->assertEquals('http://test.ru', $this->metamaster->getAbsoluteUrl($url));
     }
 
     public function testGetAbsoluteUrlHttpToHttp()
     {
-        $metamaster = new MetaMaster();
-        $metamaster->protocol = 'http';
+        $this->metamaster->protocol = 'http';
         $url = 'http://test.ru';
-        $this->assertEquals('http://test.ru', $metamaster->getAbsoluteUrl($url));
+        $this->assertEquals('http://test.ru', $this->metamaster->getAbsoluteUrl($url));
     }
 
 }

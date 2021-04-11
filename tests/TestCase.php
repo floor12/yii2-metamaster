@@ -8,6 +8,7 @@
 
 namespace floor12\metamaster\tests;
 
+use floor12\metamaster\MetaMaster;
 use Yii;
 use yii\console\Application;
 use yii\web\Request;
@@ -23,6 +24,10 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * @var View
      */
     protected $view;
+    /**
+     * @var MetaMaster
+     */
+    protected $metamaster;
 
     /**
      * @inheritdoc
@@ -32,6 +37,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->mockApplication();
         $this->view = Yii::$app->getView();
+        $this->metamaster = Yii::$app->metamaster;
     }
 
     /**

@@ -200,7 +200,7 @@ class MetaMaster extends Component
     {
 
         if ($absoluteUrl !== null)
-            $absoluteUrl = $this->request->hostInfo . $absoluteUrl;
+            $absoluteUrl = $this->request->getHostInfo() . $absoluteUrl;
         else
             $absoluteUrl = $this->request->absoluteUrl;
         return preg_replace('/https|http/', $this->protocol, $absoluteUrl, -1, $count);
@@ -253,5 +253,10 @@ class MetaMaster extends Component
             $this->view->registerMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
             $this->view->registerMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]]);
         }
+    }
+
+    public function getRequest(): Request
+    {
+        return $this->request;
     }
 }
