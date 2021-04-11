@@ -4,13 +4,12 @@
 namespace floor12\metamaster\tests;
 
 use floor12\metamaster\MetaMaster;
-use PHPUnit_Framework_TestCase;
 use Yii;
 use yii\console\Application;
 use yii\web\Request;
 use yii\web\View;
 
-abstract class TestCase extends PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Request
@@ -28,7 +27,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mockApplication();
@@ -39,7 +38,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->destroyApplication();
         parent::tearDown();
@@ -62,7 +61,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                 ],
             ]
         ]);
-        Yii::$app->metamaster->setRequest($this->getMock('\yii\web\Request', []));
+        Yii::$app->metamaster->setRequest($this->createMock('\yii\web\Request', []));
     }
 
     /**

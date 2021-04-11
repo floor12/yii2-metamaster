@@ -17,8 +17,8 @@ class MetaMasterTest extends TestCase
 
         $fullImagePath = 'https://test.url' . $this->metamaster->defaultImage;
 
-        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . $fullImagePath . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:image" content="' . $fullImagePath . '">', 'metaTags', $this->view);
+        $this->assertTrue(in_array('<meta property="twitter:image:src" content="' . $fullImagePath . '">', $this->view->metaTags));
+        $this->assertTrue(in_array('<meta property="og:image" content="' . $fullImagePath . '">', $this->view->metaTags));
     }
 
     /**
@@ -36,10 +36,10 @@ class MetaMasterTest extends TestCase
 
         $fullImagePath = 'https://test.url' . $filename;
 
-        $this->assertAttributeContains('<meta property="twitter:image:src" content="' . $fullImagePath . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:image" content="' . $fullImagePath . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:image:width" content="300">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:image:height" content="300">', 'metaTags', $this->view);
+        $this->assertTrue(in_array('<meta property="twitter:image:src" content="' . $fullImagePath . '">', $this->view->metaTags));
+        $this->assertTrue(in_array('<meta property="og:image" content="' . $fullImagePath . '">', $this->view->metaTags));
+        $this->assertTrue(in_array('<meta property="og:image:width" content="300">', $this->view->metaTags));
+        $this->assertTrue(in_array('<meta property="og:image:height" content="300">', $this->view->metaTags));
     }
 
     /**
@@ -50,8 +50,8 @@ class MetaMasterTest extends TestCase
         $title = md5(rand(0, 99999));
         $this->metamaster->setTitle($title)->register($this->view);
         $this->assertEquals($this->view->title, $title);
-        $this->assertAttributeContains('<meta property="og:title" content="' . $title . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta itemprop="name" content="' . $title . '">', 'metaTags', $this->view);
+        $this->assertTrue(in_array('<meta property="og:title" content="' . $title . '">', $this->view->metaTags));
+        $this->assertTrue(in_array('<meta itemprop="name" content="' . $title . '">', $this->view->metaTags));
     }
 
     /**
@@ -60,7 +60,7 @@ class MetaMasterTest extends TestCase
     public function testNoDescription()
     {
         $this->metamaster->register($this->view);
-        $this->assertAttributeNotContains('<meta name="description" content="">', 'metaTags', $this->view);
+        $this->assertFalse(in_array('<meta name="description" content="">', $this->view->metaTags));
     }
 
     /**
@@ -70,9 +70,9 @@ class MetaMasterTest extends TestCase
     {
         $description = md5(rand(0, 99999));
         $this->metamaster->setDescription($description)->register($this->view);
-        $this->assertAttributeContains('<meta name="description" content="' . $description . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta property="og:description" content="' . $description . '">', 'metaTags', $this->view);
-        $this->assertAttributeContains('<meta name="twitter:description" content="' . $description . '">', 'metaTags', $this->view);
+        $this->assertTrue(in_array('<meta name="description" content="' . $description . '">', $this->view->metaTags));
+        $this->assertTrue(in_array('<meta property="og:description" content="' . $description . '">', $this->view->metaTags));
+        $this->assertTrue(in_array('<meta name="twitter:description" content="' . $description . '">', $this->view->metaTags));
     }
 
 
