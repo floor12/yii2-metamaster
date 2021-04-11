@@ -1,20 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: floor12
- * Date: 07.01.2018
- * Time: 12:40
- */
+
 
 namespace floor12\metamaster\tests;
 
 use floor12\metamaster\MetaMaster;
+use PHPUnit_Framework_TestCase;
 use Yii;
 use yii\console\Application;
 use yii\web\Request;
 use yii\web\View;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Request
@@ -74,6 +70,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected function destroyApplication()
     {
-        \Yii::$app = null;
+        Yii::$app = null;
     }
 }
