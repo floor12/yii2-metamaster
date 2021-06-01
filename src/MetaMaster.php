@@ -188,7 +188,6 @@ class MetaMaster extends Component
         $this->view->registerMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
         $this->view->registerMetaTag(['name' => 'twitter:domain', 'content' => $this->getAbsoluteUrl('')]);
         $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
-        $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
         $this->view->registerLinkTag(['rel' => 'canonical', 'href' => $this->url ?: $this->getAbsoluteUrl()]);
     }
 
