@@ -198,7 +198,7 @@ class MetaMaster extends Component
     public function getAbsoluteUrl($absoluteUrl = null)
     {
         if ($absoluteUrl === null) {
-            return $this->request->absoluteUrl;
+            $absoluteUrl = $this->request->absoluteUrl;
         }
 
         if (substr($absoluteUrl, 0, 4) !== 'http') {
