@@ -1,0 +1,16 @@
+build:
+  image: default-bionic
+  environment:
+    php:
+      version: 7.4.28
+  nodes:
+    coverage:
+      dependencies:
+        before:
+          - sudo apt-get install -y ca-certificates
+      tests:
+        override:
+          - command: ./vendor/bin/phpunit --coverage-clover coverage.xml
+            coverage:
+              file: coverage.xml
+              format: clover

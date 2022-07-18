@@ -4,14 +4,10 @@
   "type": "yii2-component",
   "minimum-stability": "stable",
   "keywords": [
-    "floor12",
-    "yii2 component",
     "opengraph",
     "meta",
     "seo",
-    "yii",
-    "yii2",
-    "yii 2"
+    "yii2"
   ],
   "require": {
     "php": ">=7.1.0",
