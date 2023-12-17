@@ -8,7 +8,7 @@ class MetaMasterTest extends TestCase
     /**
      * Test custom image setting up.
      */
-    public function testDeafultImage()
+    public function testDefaultImage()
     {
         $this->metamaster->getRequest()->method('getHostInfo')->willReturn('https://test.url');
 
@@ -110,6 +110,25 @@ class MetaMasterTest extends TestCase
         $this->metamaster->getRequest()->method('getHostInfo')->willReturn('https://test.url');
         $url = '/test';
         $this->assertEquals('http://test.url/test', $this->metamaster->getAbsoluteUrl($url));
+    }
+
+    public function testDoubleTagPrevention()
+    {
+        $testUrl = 'https://test.url';
+        $description = md5("Test description text.");
+
+        $this->metamaster
+            ->setUrl($testUrl)
+            ->setDescription($description)
+            ->register($this->view);
+
+        $this->metamaster
+            ->setUrl($testUrl)
+            ->setDescription($description)
+            ->register($this->view);
+
+        $this->assertEquals(1, substr_count(implode('', $this->view->metaTags), '<meta name="description" content="' . $description . '">'));
+        $this->assertEquals(1, substr_count(implode('', $this->view->linkTags), '<link href="' . $testUrl . '" rel="canonical">'));
     }
 
 }

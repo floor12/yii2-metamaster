@@ -182,13 +182,42 @@ class MetaMaster extends Component
      */
     private function registerCoreInfo()
     {
-        $this->view->registerMetaTag(['property' => 'og:site_name', 'content' => $this->siteName]);
-        $this->view->registerMetaTag(['property' => 'og:type', 'content' => $this->type]);
-        $this->view->registerMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->getAbsoluteUrl()]);
-        $this->view->registerMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
-        $this->view->registerMetaTag(['name' => 'twitter:domain', 'content' => $this->getAbsoluteUrl('')]);
-        $this->view->registerMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
-        $this->view->registerLinkTag(['rel' => 'canonical', 'href' => $this->url ?: $this->getAbsoluteUrl()]);
+        $this->registerOrUpdateMetaTag(['property' => 'og:site_name', 'content' => $this->siteName]);
+        $this->registerOrUpdateMetaTag(['property' => 'og:type', 'content' => $this->type]);
+        $this->registerOrUpdateMetaTag(['property' => 'og:url', 'content' => $this->url ?: $this->getAbsoluteUrl()]);
+        $this->registerOrUpdateMetaTag(['name' => 'twitter:card', 'content' => 'summary']);
+        $this->registerOrUpdateMetaTag(['name' => 'twitter:domain', 'content' => $this->getAbsoluteUrl('')]);
+        $this->registerOrUpdateMetaTag(['name' => 'twitter:site', 'content' => $this->siteName]);
+        $this->registerOrUpdateLinkTag(['rel' => 'canonical', 'href' => $this->url ?: $this->getAbsoluteUrl()]);
+    }
+
+    private function registerOrUpdateMetaTag($tag)
+    {
+        $existingTags = $this->view->metaTags;
+        $tagKey = $this->generateTagKey($tag);
+
+        if (array_key_exists($tagKey, $existingTags)) {
+            unset($this->view->metaTags[$tagKey]);
+        }
+
+        $this->view->registerMetaTag($tag, $tagKey);
+    }
+
+    private function registerOrUpdateLinkTag($tag)
+    {
+        $existingTags = $this->view->linkTags;
+        $tagKey = $this->generateTagKey($tag);
+
+        if (array_key_exists($tagKey, $existingTags)) {
+            unset($this->view->linkTags[$tagKey]);
+        }
+
+        $this->view->registerLinkTag($tag, $tagKey);
+    }
+
+    private function generateTagKey($tag)
+    {
+        return md5(json_encode($tag));
     }
 
     /**
@@ -215,8 +244,8 @@ class MetaMaster extends Component
     {
         if ($this->title) {
             $this->view->title = $this->title;
-            $this->view->registerMetaTag(['property' => 'og:title', 'content' => $this->title]);
-            $this->view->registerMetaTag(['itemprop' => 'name', 'content' => $this->title]);
+            $this->registerOrUpdateMetaTag(['property' => 'og:title', 'content' => $this->title]);
+            $this->registerOrUpdateMetaTag(['itemprop' => 'name', 'content' => $this->title]);
         }
     }
 
@@ -226,12 +255,13 @@ class MetaMaster extends Component
     private function registerDescription()
     {
         if ($this->description) {
-            $this->view->registerMetaTag(['name' => 'description', 'content' => $this->description]);
-            $this->view->registerMetaTag(['property' => 'og:description', 'content' => $this->description]);
-            $this->view->registerMetaTag(['name' => 'twitter:description', 'content' => $this->description]);
+            $this->registerOrUpdateMetaTag(['name' => 'description', 'content' => $this->description]);
+            $this->registerOrUpdateMetaTag(['property' => 'og:description', 'content' => $this->description]);
+            $this->registerOrUpdateMetaTag(['name' => 'twitter:description', 'content' => $this->description]);
 
         }
     }
+
 
     /**
      * Register image
@@ -241,9 +271,9 @@ class MetaMaster extends Component
         $image = $this->image ?: $this->defaultImage;
         if ($image) {
             $imageUrl = $this->getAbsoluteUrl($image);
-            $this->view->registerMetaTag(['property' => 'og:image', 'content' => $imageUrl]);
-            $this->view->registerMetaTag(['property' => 'twitter:image:src', 'content' => $imageUrl]);
-            $this->view->registerMetaTag(['itemprop' => 'image', 'content' => $imageUrl]);
+            $this->registerOrUpdateMetaTag(['property' => 'og:image', 'content' => $imageUrl]);
+            $this->registerOrUpdateMetaTag(['property' => 'twitter:image:src', 'content' => $imageUrl]);
+            $this->registerOrUpdateMetaTag(['itemprop' => 'image', 'content' => $imageUrl]);
 
         }
 
@@ -253,8 +283,8 @@ class MetaMaster extends Component
         }
         if (file_exists($path)) {
             $imageSize = getimagesize($path);
-            $this->view->registerMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
-            $this->view->registerMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]]);
+            $this->registerOrUpdateMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
+            $this->registerOrUpdateMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]]);
         }
     }
 
