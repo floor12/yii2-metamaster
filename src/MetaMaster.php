@@ -206,7 +206,7 @@ class MetaMaster extends Component
     private function registerOrUpdateLinkTag($tag)
     {
         $existingTags = $this->view->linkTags;
-        $tagKey = $this->generateTagKey($tag);
+        $tagKey = $tag['rel'];
 
         if (array_key_exists($tagKey, $existingTags)) {
             unset($this->view->linkTags[$tagKey]);
