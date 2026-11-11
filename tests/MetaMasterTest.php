@@ -43,6 +43,31 @@ class MetaMasterTest extends TestCase
     }
 
     /**
+     * Image path pointing to a directory or a non-image file must not break the page.
+     */
+    public function testImageNotAnImage()
+    {
+        $this->metamaster->getRequest()->method('getHostInfo')->willReturn('https://test.url');
+
+        $this->metamaster
+            ->setImage('/MetaMasterTest.php', __FILE__)
+            ->register($this->view);
+
+        $this->assertTrue(in_array('<meta property="og:image" content="https://test.url/MetaMasterTest.php">', $this->view->metaTags));
+        $this->assertEmpty(preg_grep('/og:image:width/', $this->view->metaTags));
+    }
+
+    public function testNoImage()
+    {
+        $this->metamaster->defaultImage = null;
+        $this->metamaster->web = __DIR__;
+
+        $this->metamaster->register($this->view);
+
+        $this->assertEmpty(preg_grep('/og:image/', $this->view->metaTags));
+    }
+
+    /**
      * Page title testing
      */
     public function testTitle()

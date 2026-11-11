@@ -277,12 +277,16 @@ class MetaMaster extends Component
 
         }
 
+        if (!$image && !$this->imagePath) {
+            return; // без картинки путь указывал на саму папку web — getimagesize() отдавал false
+        }
         $path = Yii::getAlias($this->imagePath ?: $this->web . $image);
         if ($this->imagePath) {
             $path = $this->imagePath;
         }
-        if (file_exists($path)) {
-            $imageSize = getimagesize($path);
+        // is_file, а не file_exists: папка тоже «существует»; битый файл — getimagesize() === false
+        $imageSize = is_file($path) ? @getimagesize($path) : false;
+        if ($imageSize) {
             $this->registerOrUpdateMetaTag(['property' => 'og:image:width', 'content' => $imageSize[0]]);
             $this->registerOrUpdateMetaTag(['property' => 'og:image:height', 'content' => $imageSize[1]]);
         }
